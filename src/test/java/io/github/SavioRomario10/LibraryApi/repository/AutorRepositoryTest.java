@@ -3,6 +3,7 @@ package io.github.SavioRomario10.LibraryApi.repository;
 import java.time.LocalDate;
 import java.util.UUID;
 import java.util.Optional;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,9 @@ public class AutorRepositoryTest {
 
     Autor autor = new Autor();
 
-    autor.setNome("Sávio Romário");
-    autor.setDataNascimento(LocalDate.of(1996, 11, 3));
-    autor.setNacionalidade("Brasileiro");
+    autor.setNome("Gaby Marques");
+    autor.setDataNascimento(LocalDate.of(2000, 10, 25));
+    autor.setNacionalidade("Brasileira");
 
     var autorSalvo = repository.save(autor);
     System.out.println("Autor salvo: " + autorSalvo);
@@ -42,5 +43,16 @@ public class AutorRepositoryTest {
 
       repository.save(autorEncontrado);
     }
+  }
+
+  @Test
+  public void listarTest(){
+    List<Autor> list = repository.findAll();
+    list.forEach(System.out::println);
+  }
+
+  @Test
+  public void countTest(){
+    System.out.println("Contagem de autores: " + repository.count());
   }
 }

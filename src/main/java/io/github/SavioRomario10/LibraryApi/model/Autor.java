@@ -11,11 +11,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
-import lombok.Data;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name="autor")
-@Data
+@Getter
+@Setter
 public class Autor {
 
   @Id
@@ -34,4 +37,10 @@ public class Autor {
 
   @OneToMany(mappedBy = "autor")
   private List<Livro> livros;
+
+  @Override
+  public String toString() {
+    return "Autor [id=" + id + ", nome=" + nome + ", dataNascimento=" + dataNascimento + ", nacionalidade="
+        + nacionalidade + "]";
+  }  
 }
