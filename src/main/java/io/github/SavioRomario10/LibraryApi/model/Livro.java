@@ -45,6 +45,18 @@ public class Livro {
   @JoinColumn(name = "id_autor")
   private Autor autor;
 
+  public Livro() {}
+  public Livro(UUID id, String isbn, String titulo, GeneroLivro genero, LocalDate dataPublicacao, BigDecimal preco,
+      Autor autor) {
+    this.id = id;
+    this.isbn = isbn;
+    this.titulo = titulo;
+    this.genero = genero;
+    this.dataPublicacao = dataPublicacao;
+    this.preco = preco;
+    this.autor = autor;
+  }
+
   public UUID getId() {
     return id;
   }

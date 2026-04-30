@@ -33,6 +33,14 @@ public class Autor {
   @OneToMany(mappedBy = "autor")
   private List<Livro> livros;
 
+  public Autor() {}
+  public Autor(UUID id, String nome, LocalDate dataNascimento, String nacionalidade) {
+    this.id = id;
+    this.nome = nome;
+    this.dataNascimento = dataNascimento;
+    this.nacionalidade = nacionalidade;
+  }
+
   public UUID getId() {
     return id;
   }
