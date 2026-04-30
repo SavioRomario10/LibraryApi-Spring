@@ -22,9 +22,9 @@ public class AutorRepositoryTest {
 
     Autor autor = new Autor();
 
-    autor.setNome("Gaby Marques");
-    autor.setDataNascimento(LocalDate.of(2000, 10, 25));
-    autor.setNacionalidade("Brasileira");
+    autor.setNome("Sávio Romário");
+    autor.setDataNascimento(LocalDate.of(1996, 11, 03));
+    autor.setNacionalidade("Brasileiro");
 
     var autorSalvo = repository.save(autor);
     System.out.println("Autor salvo: " + autorSalvo);
@@ -32,14 +32,14 @@ public class AutorRepositoryTest {
 
   @Test
   public void atualizarTest(){
-    var id = UUID.fromString("64ca133d-6d3c-42bc-809b-78aa37729292");
+    var id = UUID.fromString("d2f4ce19-6607-44ef-ba96-6705e0424b63");
 
     Optional<Autor> possivelAutor = repository.findById(id);
 
     if(possivelAutor.isPresent()){
       Autor autorEncontrado = possivelAutor.get();
       
-      autorEncontrado.setNome("Sávio");
+      autorEncontrado.setNome("Sávio Romário");
 
       repository.save(autorEncontrado);
     }
@@ -53,6 +53,22 @@ public class AutorRepositoryTest {
 
   @Test
   public void countTest(){
-    System.out.println("Contagem de autores: " + repository.count());
+    var count = repository.count();
+    System.out.println("Contagem de autores: " + count);
+  }
+
+  @Test
+  public void deletePorIdTest(){
+    var id = UUID.fromString("d2f4ce19-6607-44ef-ba96-6705e0424b63");
+
+    repository.deleteById(id);
+  }
+
+  @Test
+  public void deletarTest(){
+    var id = UUID.fromString("145f5905-4234-4cc5-a30e-949a1e7ae22b");
+    var autor = repository.findById(id).get();
+
+    repository.delete(autor);
   }
 }
