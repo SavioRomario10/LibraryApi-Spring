@@ -93,6 +93,12 @@ public class Livro {
   public void setAutor(Autor autor) {
     this.autor = autor;
   }
+    public BigDecimal getPreco() {
+    return preco;
+  }
+  public void setPreco(BigDecimal preco) {
+    this.preco = preco;
+  }
   @Override
   public int hashCode() {
     final int prime = 31;
