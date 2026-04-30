@@ -15,11 +15,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
 
 @Entity
 @Table(name = "livro")
-@Data
 public class Livro {
 
   @Id
@@ -46,4 +44,69 @@ public class Livro {
   @ManyToOne
   @JoinColumn(name = "id_autor")
   private Autor autor;
+
+  public UUID getId() {
+    return id;
+  }
+  public void setId(UUID id) {
+    this.id = id;
+  }
+  public String getIsbn() {
+    return isbn;
+  }
+  public void setIsbn(String isbn) {
+    this.isbn = isbn;
+  }
+  public String getTitulo() {
+    return titulo;
+  }
+  public void setTitulo(String titulo) {
+    this.titulo = titulo;
+  }
+  public GeneroLivro getGenero() {
+    return genero;
+  }
+  public void setGenero(GeneroLivro genero) {
+    this.genero = genero;
+  }
+  public LocalDate getDataPublicacao() {
+    return dataPublicacao;
+  }
+  public void setDataPublicacao(LocalDate dataPublicacao) {
+    this.dataPublicacao = dataPublicacao;
+  }
+  public Autor getAutor() {
+    return autor;
+  }
+  public void setAutor(Autor autor) {
+    this.autor = autor;
+  }
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
+  }
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Livro other = (Livro) obj;
+    if (id == null) {
+      if (other.id != null)
+        return false;
+    } else if (!id.equals(other.id))
+      return false;
+    return true;
+  }
+  @Override
+  public String toString() {
+    return "Livro [id=" + id + ", isbn=" + isbn + ", titulo=" + titulo + ", genero=" + genero + ", dataPublicacao="
+        + dataPublicacao + ", preco=" + preco + ", autor=" + autor + "]";
+  }
 }
