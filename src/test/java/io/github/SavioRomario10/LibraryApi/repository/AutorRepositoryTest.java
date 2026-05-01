@@ -3,19 +3,26 @@ package io.github.SavioRomario10.LibraryApi.repository;
 import java.time.LocalDate;
 import java.util.UUID;
 import java.util.Optional;
+import java.util.ArrayList;
 import java.util.List;
+import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;          
+import org.springframework.boot.test.context.SpringBootTest;    
 
 import io.github.SavioRomario10.LibraryApi.model.Autor;
+import io.github.SavioRomario10.LibraryApi.model.Livro;
+import io.github.SavioRomario10.LibraryApi.model.enums.GeneroLivro;
 
 @SpringBootTest
 public class AutorRepositoryTest {
 
   @Autowired
   AutorRepository repository;
+
+  @Autowired
+  LivroRepository livroRepository;
 
   @Test
   public void salvarTest(){
@@ -70,5 +77,41 @@ public class AutorRepositoryTest {
     var autor = repository.findById(id).get();
 
     repository.delete(autor);
+  }
+
+  @Test
+  public void salvarAutorComLivrosTest(){
+
+    Autor autor = new Autor();
+
+    autor.setNome("Antonio");
+    autor.setDataNascimento(LocalDate.of(1970, 8, 03));
+    autor.setNacionalidade("Brasileiro");
+
+    Livro livro = new Livro();
+
+    livro.setIsbn("1465871234");
+    livro.setTitulo("Matematica para iniciantes");
+    livro.setGenero(GeneroLivro.CIENCIA);
+    livro.setDataPublicacao(LocalDate.of(1995,1, 2));
+    livro.setPreco(BigDecimal.valueOf(100));
+    livro.setAutor(autor);
+
+    autor.setLivros(new ArrayList<>());
+    autor.getLivros().add(livro);
+
+    repository.save(autor);
+    livroRepository.saveAll(autor.getLivros());
+  }
+
+  @Test
+  public void mostrarLivrosAutor(){
+    var id = UUID.fromString("48fe489c-1dcc-4d54-888f-7eacd9a4d207");
+    var autor = repository.findById(id).get();
+
+    List<Livro> livros = livroRepository.findByAutor(autor);
+    autor.setLivros(livros);
+
+    autor.getLivros().forEach(System.out::println);
   }
 }

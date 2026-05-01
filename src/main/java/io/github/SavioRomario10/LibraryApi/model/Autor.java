@@ -4,13 +4,14 @@ import java.time.LocalDate;
 import java.util.UUID;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import jakarta.persistence.Column;
 
 @Entity
@@ -31,8 +32,7 @@ public class Autor {
   @Column(name = "nacionalidade", length = 50, nullable = false)
   private String nacionalidade;
 
-  @OneToMany(mappedBy = "autor")
-  @Transient
+  @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<Livro> livros;
 
   public Autor() {}
@@ -67,6 +67,12 @@ public class Autor {
   public void setNacionalidade(String nacionalidade) {
     this.nacionalidade = nacionalidade;
   }  
+    public List<Livro> getLivros() {
+    return livros;
+  }
+  public void setLivros(List<Livro> livros) {
+    this.livros = livros;
+  } 
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -94,5 +100,5 @@ public class Autor {
   public String toString() {
     return "Autor [id=" + id + ", nome=" + nome + ", dataNascimento=" + dataNascimento + ", nacionalidade="
         + nacionalidade + "]";
-  }  
+  } 
 }
