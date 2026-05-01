@@ -114,4 +114,16 @@ public class LivroRepositoryTest {
     System.out.println("livro:"+livro.getTitulo());
     System.out.println("Autor:"+livro.getAutor().getNome());
   }
+
+  @Test
+  public void buscarPorTituloTest(){
+    List<Livro> livros = repository.findByTitulo("UFO");
+    livros.forEach(System.out::println);
+  }
+
+  @Test
+  public void buscarPorIsbnTest(){
+    List<Livro> livros = repository.findByIsbn("1465871234");
+    livros.forEach(System.out::println);
+  }
 }
