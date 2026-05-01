@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.persistence.Column;
 
 @Entity
@@ -31,6 +32,7 @@ public class Autor {
   private String nacionalidade;
 
   @OneToMany(mappedBy = "autor")
+  @Transient
   private List<Livro> livros;
 
   public Autor() {}

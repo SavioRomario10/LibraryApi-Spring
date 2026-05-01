@@ -3,6 +3,7 @@ package io.github.SavioRomario10.LibraryApi.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -82,6 +83,7 @@ public class LivroRepositoryTest {
     List<Livro> list = repository.findAll();
     list.forEach(System.out::println);
   }
+
 @Test
   public void countTest(){
     var count = repository.count();
@@ -101,5 +103,15 @@ public class LivroRepositoryTest {
     var livro = repository.findById(id).get();
 
     repository.delete(livro);
+  }
+
+  @Test
+  @Transactional
+  public void buscarLivroTest(){
+    UUID id = UUID.fromString("670e952f-7e3b-4165-b874-17416229e26f");
+    Livro livro = repository.findById(id).orElse(null);
+
+    System.out.println("livro:"+livro.getTitulo());
+    System.out.println("Autor:"+livro.getAutor().getNome());
   }
 }
