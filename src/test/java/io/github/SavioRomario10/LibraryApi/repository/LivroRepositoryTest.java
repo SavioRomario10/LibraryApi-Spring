@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
+import java.util.Optional;
+import java.util.List;
 
 import io.github.SavioRomario10.LibraryApi.model.enums.GeneroLivro;
 import io.github.SavioRomario10.LibraryApi.model.Autor;
@@ -58,5 +60,46 @@ public class LivroRepositoryTest {
     livro.setAutor(autor);
 
     repository.save(livro);
+  }
+
+  @Test
+  public void atualizarTest(){
+    var id = UUID.fromString("59c69b00-0f34-4ef1-a6c1-94c1ee5ab2f6");
+
+    Optional<Livro> possivelLivro = repository.findById(id);
+
+    if(possivelLivro.isPresent()){
+      Livro livroEncontrado = possivelLivro.get();
+      
+      livroEncontrado.setTitulo("UFO: uma história inventada");
+
+      repository.save(livroEncontrado);
+    }
+  }
+
+  @Test
+  public void listarTest(){
+    List<Livro> list = repository.findAll();
+    list.forEach(System.out::println);
+  }
+@Test
+  public void countTest(){
+    var count = repository.count();
+    System.out.println("Contagem de livros: " + count);
+  }
+
+  @Test
+  public void deletePorIdTest(){
+    var id = UUID.fromString("670e952f-7e3b-4165-b874-17416229e26f");
+
+    repository.deleteById(id);
+  }
+
+  @Test
+  public void deletarTest(){
+    var id = UUID.fromString("670e952f-7e3b-4165-b874-17416229e26f");
+    var livro = repository.findById(id).get();
+
+    repository.delete(livro);
   }
 }
