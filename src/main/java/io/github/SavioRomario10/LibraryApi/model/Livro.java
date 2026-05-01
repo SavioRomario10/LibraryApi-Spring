@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import io.github.SavioRomario10.LibraryApi.model.enums.GeneroLivro;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
