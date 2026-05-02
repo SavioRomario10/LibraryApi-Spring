@@ -8,7 +8,9 @@ import io.github.SavioRomario10.LibraryApi.model.Autor;
 import io.github.SavioRomario10.LibraryApi.model.Livro;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -53,4 +55,14 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
 
   @Query("select l from Livro l where l.genero = ?1 order by ?2")
   List<Livro> findByGeneroQuery(GeneroLivro genero, String parametro);
+
+  @Modifying
+  @Transactional
+  @Query("delete from Livro where genero = :genero")
+  void deleteByGenero(@Param("genero") GeneroLivro genero);
+
+  @Modifying
+  @Transactional
+  @Query("update Livro l set l.data_publicacao = :novadata")
+  void updateDataPublicacao(@Param("novadata") LocalDate novadata);
 }

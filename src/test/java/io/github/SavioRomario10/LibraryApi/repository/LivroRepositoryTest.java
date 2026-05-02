@@ -172,4 +172,14 @@ public class LivroRepositoryTest {
 
     resultado.forEach(System.out::println);
   }
+
+  @Test
+  public void deletePorGeneroTest(){
+    repository.deleteByGenero(GeneroLivro.CIENCIA);
+  }
+
+  @Test
+  public void updateDataPublicacaoTest(){
+    repository.updateDataPublicacao(LocalDate.of(2026, 12, 20));
+  }
 }
