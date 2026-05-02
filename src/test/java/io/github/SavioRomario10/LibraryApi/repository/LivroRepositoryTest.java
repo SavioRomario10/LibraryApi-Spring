@@ -126,4 +126,30 @@ public class LivroRepositoryTest {
     List<Livro> livros = repository.findByIsbn("1465871234");
     livros.forEach(System.out::println);
   }
+
+  @Test
+  public void buscarPorTituloAndPrecoTest(){
+    var preco = BigDecimal.valueOf(100);
+    String titulo = "UFO";
+    List<Livro> livros = repository.findByTituloAndPreco(titulo, preco);
+    livros.forEach(System.out::println);
+  }
+
+  @Test
+  public void listarLivrosComQuery(){
+    List<Livro> resultado = repository.listarTodos();
+    resultado.forEach(System.out::println);
+  }
+
+  @Test
+  public void listarAutores(){
+    List<Autor> autores = repository.listarAutores();
+    autores.forEach(System.out::println);
+  }
+
+  @Test
+  public void listarNomesDiferentes(){
+    List<String> nomes = repository.listarNomesDiferentes();
+    nomes.forEach(System.out::println);
+  }
 }
