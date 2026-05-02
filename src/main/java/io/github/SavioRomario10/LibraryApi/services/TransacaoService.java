@@ -2,6 +2,7 @@ package io.github.SavioRomario10.LibraryApi.services;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,10 +18,17 @@ import jakarta.transaction.Transactional;
 public class TransacaoService {
 
   @Autowired
-  public AutorRepository autorRepository;
+  private AutorRepository autorRepository;
 
   @Autowired
-  public LivroRepository livroRepository;
+  private LivroRepository livroRepository;
+
+  @Transactional
+  public void atualizacaoSemAtualizar(){
+    var livro = livroRepository.findById(UUID.fromString("670e952f-7e3b-4165-b874-17416229e26f")).orElse(null);
+
+    livro.setPreco(BigDecimal.valueOf(1000));
+  }
 
   @Transactional
   public void execuatar(){
@@ -42,5 +50,9 @@ public class TransacaoService {
     livro.setAutor(autor);
 
     livroRepository.save(livro);
+
+    if(autor.getNome().equals("Francisca")){
+      throw new IllegalArgumentException("RollBack!");
+    }
   }
 }
