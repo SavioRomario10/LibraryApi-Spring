@@ -50,4 +50,7 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
     @Param("genero") GeneroLivro genero,
     @Param("parametro") String parametro
   );
+
+  @Query("select l from Livro l where l.genero = ?1 order by ?2")
+  List<Livro> findByGeneroQuery(GeneroLivro genero, String parametro);
 }

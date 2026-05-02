@@ -160,8 +160,15 @@ public class LivroRepositoryTest {
   }
 
   @Test
-  public void listarPorGeneroQuery(){
+  public void listarPorGenero(){
     var resultado = repository.findByGenero(GeneroLivro.FICCAO, "dataPublicacao");
+
+    resultado.forEach(System.out::println);
+  }
+
+  @Test
+  public void listarPorGeneroQuery(){
+    var resultado = repository.findByGeneroQuery(GeneroLivro.FICCAO, "dataPublicacao");
 
     resultado.forEach(System.out::println);
   }
