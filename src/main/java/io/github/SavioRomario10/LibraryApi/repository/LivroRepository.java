@@ -63,6 +63,6 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
 
   @Modifying
   @Transactional
-  @Query("update Livro l set l.data_publicacao = :novadata")
+  @Query("update Livro l set l.dataPublicacao = :novadata")
   void updateDataPublicacao(@Param("novadata") LocalDate novadata);
 }
