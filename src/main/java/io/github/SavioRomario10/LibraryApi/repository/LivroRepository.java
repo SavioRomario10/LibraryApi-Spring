@@ -10,8 +10,11 @@ import io.github.SavioRomario10.LibraryApi.model.Livro;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import io.github.SavioRomario10.LibraryApi.model.enums.GeneroLivro;
+
 
 /**
  * @see LivroRepositoryTest
@@ -34,4 +37,17 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
   List<Autor> listarAutores();
   @Query("select distinct l.titulo from Livro l")
   List<String> listarNomesDiferentes();
+  @Query("""
+    select l.genero
+    from Livro l
+    join l.autor a
+    where a.nacionalidade like 'Brasil%'
+    order by l.genero
+    """)
+  List<String> listarGenerosAutoresBrasileiros();
+  @Query("select l from Livro l where l.genero = :genero order by :parametro")
+  List<Livro> findByGenero(
+    @Param("genero") GeneroLivro genero,
+    @Param("parametro") String parametro
+  );
 }

@@ -152,4 +152,17 @@ public class LivroRepositoryTest {
     List<String> nomes = repository.listarNomesDiferentes();
     nomes.forEach(System.out::println);
   }
+
+  @Test
+  public void listarGenerosAutoresBrasileiros(){
+    List<String> generos = repository.listarGenerosAutoresBrasileiros();
+    generos.forEach(System.out::println);
+  }
+
+  @Test
+  public void listarPorGeneroQuery(){
+    var resultado = repository.findByGenero(GeneroLivro.FICCAO, "dataPublicacao");
+
+    resultado.forEach(System.out::println);
+  }
 }
