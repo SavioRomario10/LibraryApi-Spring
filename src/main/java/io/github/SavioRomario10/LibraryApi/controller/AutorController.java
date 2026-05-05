@@ -4,10 +4,10 @@ import io.github.SavioRomario10.LibraryApi.controller.dto.AutorDTO;
 import io.github.SavioRomario10.LibraryApi.model.Autor;
 import io.github.SavioRomario10.LibraryApi.services.AutorService;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -58,5 +58,43 @@ public class AutorController {
       return ResponseEntity.noContent().build();
     }
     return ResponseEntity.notFound().build();
+  }
+
+  @GetMapping
+  public ResponseEntity<List<AutorDTO>> pesquisar(
+    @RequestParam (value = "nome", required = false) String nome, 
+    @RequestParam (value = "nacionalidade", required = false) String nacionalidade){
+
+    List<Autor> autores = service.pesquisa(nome, nacionalidade);
+    List<AutorDTO> autorDTOs = 
+      autores.stream().map(
+        autor -> new AutorDTO(
+          autor.getId(), 
+          autor.getNome(), 
+          autor.getDataNascimento(),
+          autor.getNacionalidade())
+        ).collect(Collectors.toList());
+
+    return ResponseEntity.ok(autorDTOs);
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<Void> atualizar(
+    @PathVariable("id") String id, @RequestBody AutorDTO autorDTO){
+
+      Optional<Autor> autorOptional = service.obterPorId(UUID.fromString(id));
+
+      if(autorOptional.isEmpty()){
+        return ResponseEntity.notFound().build();
+      }
+
+      Autor autor = autorOptional.get();
+      autor.setNome(autorDTO.nome());
+      autor.setDataNascimento(autorDTO.dataNascimento());
+      autor.setNacionalidade(autorDTO.nacionalidade());
+
+      service.atualizar(autor);
+
+      return ResponseEntity.noContent().build();
   }
 }
