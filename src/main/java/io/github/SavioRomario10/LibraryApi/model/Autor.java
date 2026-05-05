@@ -1,12 +1,14 @@
 package io.github.SavioRomario10.LibraryApi.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,8 +16,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Column;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 @Entity
 @Table(name="autor")
+@EntityListeners(AuditingEntityListener.class)
 public class Autor {
 
   @Id
@@ -34,6 +41,17 @@ public class Autor {
 
   @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<Livro> livros;
+
+  @CreatedDate
+  @Column(name = "data_cadastro", nullable = false)
+  private LocalDateTime dataCadastro;
+
+  @LastModifiedDate
+  @Column(name = "data_atualizacao")
+  private LocalDateTime dataAtualizacao;
+
+  @Column(name = "id_usuario")
+  private UUID idUsuario;
 
   public Autor() {}
   public Autor(UUID id, String nome, LocalDate dataNascimento, String nacionalidade) {
@@ -73,6 +91,25 @@ public class Autor {
   public void setLivros(List<Livro> livros) {
     this.livros = livros;
   } 
+
+  public LocalDateTime getDataCadastro() {
+    return dataCadastro;
+  }
+  public void setDataCadastro(LocalDateTime dataCadastro) {
+    this.dataCadastro = dataCadastro;
+  }
+  public LocalDateTime getDataAtualizacao() {
+    return dataAtualizacao;
+  }
+  public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
+    this.dataAtualizacao = dataAtualizacao;
+  }
+  public UUID getIdUsuario() {
+    return idUsuario;
+  }
+  public void setIdUsuario(UUID idUsuario) {
+    this.idUsuario = idUsuario;
+  }
   @Override
   public int hashCode() {
     final int prime = 31;
