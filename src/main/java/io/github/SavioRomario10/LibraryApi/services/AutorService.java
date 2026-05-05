@@ -1,5 +1,8 @@
 package io.github.SavioRomario10.LibraryApi.services;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import io.github.SavioRomario10.LibraryApi.repository.AutorRepository;
@@ -16,5 +19,13 @@ public class AutorService {
 
   public Autor salvar(Autor autor) {
     return repository.save(autor);
+  }
+
+  public Optional<Autor> obterPorId(UUID id){
+    return repository.findById(id);
+  }
+
+  public void deletar(Autor autor){
+    repository.delete(autor);
   }
 }
