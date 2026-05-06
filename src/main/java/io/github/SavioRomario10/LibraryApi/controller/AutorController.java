@@ -1,6 +1,8 @@
 package io.github.SavioRomario10.LibraryApi.controller;
 
 import io.github.SavioRomario10.LibraryApi.controller.dto.AutorDTO;
+import io.github.SavioRomario10.LibraryApi.controller.dto.ErroResposta;
+import io.github.SavioRomario10.LibraryApi.exception.RegistroDuplicadoException;
 import io.github.SavioRomario10.LibraryApi.model.Autor;
 import io.github.SavioRomario10.LibraryApi.services.AutorService;
 
@@ -25,14 +27,20 @@ public class AutorController {
   }
 
   @PostMapping
-  public ResponseEntity<Void> salvar(@RequestBody AutorDTO autor){
+  public ResponseEntity<Object> salvar(@RequestBody AutorDTO autor){
 
-    Autor autorEntidade = autor.mapearParaAutor();
-    service.salvar(autorEntidade);
-
-    URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(autorEntidade.getId()).toUri();
-
-    return ResponseEntity.created(location).build();
+    try{ 
+      Autor autorEntidade = autor.mapearParaAutor();
+      service.salvar(autorEntidade);
+      
+      URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(autorEntidade.getId()).toUri();
+      
+      return ResponseEntity.created(location).build();
+    }
+    catch(RegistroDuplicadoException e){
+      var erroDTO = ErroResposta.conflito(e.getMessage());
+      return ResponseEntity.status(erroDTO.Status()).body(erroDTO);
+    }
   }
 
   @GetMapping("/{id}")
@@ -79,22 +87,28 @@ public class AutorController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Void> atualizar(
+  public ResponseEntity<Object> atualizar(
     @PathVariable("id") String id, @RequestBody AutorDTO autorDTO){
 
-      Optional<Autor> autorOptional = service.obterPorId(UUID.fromString(id));
-
-      if(autorOptional.isEmpty()){
-        return ResponseEntity.notFound().build();
+      try{
+        Optional<Autor> autorOptional = service.obterPorId(UUID.fromString(id));
+        
+        if(autorOptional.isEmpty()){
+          return ResponseEntity.notFound().build();
+        }
+        
+        Autor autor = autorOptional.get();
+        autor.setNome(autorDTO.nome());
+        autor.setDataNascimento(autorDTO.dataNascimento());
+        autor.setNacionalidade(autorDTO.nacionalidade());
+        
+        service.atualizar(autor);
+        
+        return ResponseEntity.noContent().build();
       }
-
-      Autor autor = autorOptional.get();
-      autor.setNome(autorDTO.nome());
-      autor.setDataNascimento(autorDTO.dataNascimento());
-      autor.setNacionalidade(autorDTO.nacionalidade());
-
-      service.atualizar(autor);
-
-      return ResponseEntity.noContent().build();
+      catch(RegistroDuplicadoException e){
+        var erroDTO = ErroResposta.conflito(e.getMessage());
+        return ResponseEntity.status(erroDTO.Status()).body(erroDTO);
+      }
   }
 }

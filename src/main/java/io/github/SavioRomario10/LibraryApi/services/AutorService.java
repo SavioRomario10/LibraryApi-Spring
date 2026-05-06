@@ -7,18 +7,22 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import io.github.SavioRomario10.LibraryApi.repository.AutorRepository;
+import io.github.SavioRomario10.LibraryApi.validator.AutorValidador;
 import io.github.SavioRomario10.LibraryApi.model.Autor;
 
 @Service
 public class AutorService {
 
   private final AutorRepository repository;
+  private final AutorValidador validador;
 
-  public AutorService(AutorRepository repository) {
+  public AutorService(AutorRepository repository, AutorValidador validador) {
     this.repository = repository;
+    this.validador = validador;
   }
 
   public Autor salvar(Autor autor) {
+    validador.validar(autor);
     return repository.save(autor);
   }
 
@@ -26,6 +30,7 @@ public class AutorService {
     if(autor.getId() == null) 
       throw new IllegalArgumentException("O id do autor precisa ser informado!");
     
+    validador.validar(autor);
     repository.save(autor);
   }
 
