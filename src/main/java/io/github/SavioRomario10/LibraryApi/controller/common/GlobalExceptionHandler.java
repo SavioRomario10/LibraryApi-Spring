@@ -17,7 +17,7 @@ import io.github.SavioRomario10.LibraryApi.controller.dto.ErroResposta;
 public class GlobalExceptionHandler{
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_CONTENT)
   public ErroResposta handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
     
     List<FieldError> fieldErrors = e.getFieldErrors();
@@ -28,7 +28,7 @@ public class GlobalExceptionHandler{
         ).collect(Collectors.toList());
 
     return new ErroResposta(
-      HttpStatus.UNPROCESSABLE_ENTITY.value(),
+      HttpStatus.UNPROCESSABLE_CONTENT.value(),
       "Erro de validação",
       erros
     );
