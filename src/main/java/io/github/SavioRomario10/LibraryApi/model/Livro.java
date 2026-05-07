@@ -2,11 +2,17 @@ package io.github.SavioRomario10.LibraryApi.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import io.github.SavioRomario10.LibraryApi.model.enums.GeneroLivro;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -19,6 +25,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "livro")
+@EntityListeners(AuditingEntityListener.class)
 public class Livro {
 
   @Id
@@ -45,6 +52,17 @@ public class Livro {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "id_autor")
   private Autor autor;
+
+  @CreatedDate
+  @Column(name = "data_cadastro", nullable = false)
+  private LocalDateTime dataCadastro;
+
+  @LastModifiedDate
+  @Column(name = "data_atualizacao")
+  private LocalDateTime dataAtualizacao;
+
+  @Column(name = "id_usuario")
+  private UUID idUsuario;
 
   public Livro() {}
   public Livro(UUID id, String isbn, String titulo, GeneroLivro genero, LocalDate dataPublicacao, BigDecimal preco,
