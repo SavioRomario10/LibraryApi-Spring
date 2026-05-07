@@ -6,6 +6,7 @@ import io.github.SavioRomario10.LibraryApi.exception.OperacaoNaoPermitidaExcepti
 import io.github.SavioRomario10.LibraryApi.exception.RegistroDuplicadoException;
 import io.github.SavioRomario10.LibraryApi.model.Autor;
 import io.github.SavioRomario10.LibraryApi.services.AutorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.net.URI;
@@ -25,8 +26,10 @@ public class AutorController {
 
   private final AutorService service;
 
+
   @PostMapping
-  public ResponseEntity<Object> salvar(@RequestBody AutorDTO autor){
+  public ResponseEntity<Object> salvar(
+    @RequestBody @Valid AutorDTO autor){
 
     try{ 
       Autor autorEntidade = autor.mapearParaAutor();
@@ -80,7 +83,8 @@ public class AutorController {
     @RequestParam (value = "nome", required = false) String nome, 
     @RequestParam (value = "nacionalidade", required = false) String nacionalidade){
 
-    List<Autor> autores = service.pesquisa(nome, nacionalidade);
+    List<Autor> autores = service.pesquisaByExample(nome, nacionalidade);
+
     List<AutorDTO> autorDTOs = 
       autores.stream().map(
         autor -> new AutorDTO(
@@ -95,7 +99,8 @@ public class AutorController {
 
   @PutMapping("/{id}")
   public ResponseEntity<Object> atualizar(
-    @PathVariable("id") String id, @RequestBody AutorDTO autorDTO){
+    @PathVariable("id") String id,
+    @RequestBody @Valid AutorDTO autorDTO){
 
       try{
         Optional<Autor> autorOptional = service.obterPorId(UUID.fromString(id));
