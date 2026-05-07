@@ -7,19 +7,19 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 
 import io.github.SavioRomario10.LibraryApi.repository.AutorRepository;
+import io.github.SavioRomario10.LibraryApi.repository.LivroRepository;
 import io.github.SavioRomario10.LibraryApi.validator.AutorValidador;
+import lombok.RequiredArgsConstructor;
+import io.github.SavioRomario10.LibraryApi.exception.OperacaoNaoPermitidaException;
 import io.github.SavioRomario10.LibraryApi.model.Autor;
 
 @Service
+@RequiredArgsConstructor
 public class AutorService {
 
   private final AutorRepository repository;
   private final AutorValidador validador;
-
-  public AutorService(AutorRepository repository, AutorValidador validador) {
-    this.repository = repository;
-    this.validador = validador;
-  }
+  private final LivroRepository livroRepository;
 
   public Autor salvar(Autor autor) {
     validador.validar(autor);
@@ -39,6 +39,9 @@ public class AutorService {
   }
 
   public void deletar(Autor autor){
+    if(possuiLivro(autor)){
+      throw new OperacaoNaoPermitidaException("Não é permitido excluir, este Autor possui livros cadastrados!");
+    }
     repository.delete(autor);
   }
 
@@ -53,5 +56,9 @@ public class AutorService {
       return repository.findByNacionalidade(nacionalidade);
     }
     return repository.findAll();
+  }
+
+  public boolean possuiLivro(Autor autor){
+    return livroRepository.existsByAutor(autor);
   }
 }

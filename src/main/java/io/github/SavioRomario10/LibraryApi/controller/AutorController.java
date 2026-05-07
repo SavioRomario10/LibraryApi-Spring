@@ -2,9 +2,11 @@ package io.github.SavioRomario10.LibraryApi.controller;
 
 import io.github.SavioRomario10.LibraryApi.controller.dto.AutorDTO;
 import io.github.SavioRomario10.LibraryApi.controller.dto.ErroResposta;
+import io.github.SavioRomario10.LibraryApi.exception.OperacaoNaoPermitidaException;
 import io.github.SavioRomario10.LibraryApi.exception.RegistroDuplicadoException;
 import io.github.SavioRomario10.LibraryApi.model.Autor;
 import io.github.SavioRomario10.LibraryApi.services.AutorService;
+import lombok.RequiredArgsConstructor;
 
 import java.net.URI;
 import java.util.List;
@@ -17,14 +19,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/autores")
 public class AutorController {
 
   private final AutorService service;
-
-  public AutorController(AutorService service) {
-    this.service = service;
-  }
 
   @PostMapping
   public ResponseEntity<Object> salvar(@RequestBody AutorDTO autor){
@@ -58,14 +57,22 @@ public class AutorController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deletar(@PathVariable("id") String id){
-    Optional<Autor> autorOptional = service.obterPorId(UUID.fromString(id));
+  public ResponseEntity<Object> deletar(@PathVariable("id") String id){
+    try{
 
-    if(autorOptional.isPresent()){
-      service.deletar(autorOptional.get());
-      return ResponseEntity.noContent().build();
+      Optional<Autor> autorOptional = service.obterPorId(UUID.fromString(id));
+      
+      if(autorOptional.isPresent()){
+        service.deletar(autorOptional.get());
+        return ResponseEntity.noContent().build();
+      }
+      return ResponseEntity.notFound().build();
     }
-    return ResponseEntity.notFound().build();
+    catch(OperacaoNaoPermitidaException e){
+      var erroResposta = ErroResposta.respostaPadrao(e.getMessage());
+
+      return ResponseEntity.status(erroResposta.Status()).body(erroResposta);
+    }
   }
 
   @GetMapping
