@@ -24,7 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/autores")
-public class AutorController {
+public class AutorController implements GenericController{
 
   private final AutorService service;
   private final AutorMapper mapper;
@@ -37,7 +37,7 @@ public class AutorController {
       Autor autor = mapper.toEntity(dto);
       service.salvar(autor);
       
-      URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(autor.getId()).toUri();
+      URI location = gerarHeaderLocation(autor.getId());
       
       return ResponseEntity.created(location).build();
     }
