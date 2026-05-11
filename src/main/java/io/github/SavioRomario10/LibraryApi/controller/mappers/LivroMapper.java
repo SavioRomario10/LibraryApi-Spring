@@ -9,7 +9,7 @@ import io.github.SavioRomario10.LibraryApi.model.Livro;
 import io.github.SavioRomario10.LibraryApi.repository.AutorRepository;
 
 @Mapper(componentModel = "spring")
-public abstract class LivroMapper {
+public abstract class LivroMapper{
 
   @Autowired
   AutorRepository autorRepository;

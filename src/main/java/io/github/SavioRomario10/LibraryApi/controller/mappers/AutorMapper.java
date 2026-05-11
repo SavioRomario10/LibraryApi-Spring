@@ -6,7 +6,7 @@ import io.github.SavioRomario10.LibraryApi.controller.dto.AutorDTO;
 import io.github.SavioRomario10.LibraryApi.model.Autor;
 
 @Mapper(componentModel = "spring")
-public interface AutorMapper {
+public interface AutorMapper{
 
   Autor toEntity(AutorDTO dto);
 

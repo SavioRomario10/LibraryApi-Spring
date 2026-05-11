@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import io.github.SavioRomario10.LibraryApi.controller.dto.ErroCampo;
 import io.github.SavioRomario10.LibraryApi.controller.dto.ErroResposta;
+import io.github.SavioRomario10.LibraryApi.exception.RegistroDuplicadoException;
+import io.github.SavioRomario10.LibraryApi.exception.OperacaoNaoPermitidaException;;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler{
@@ -31,6 +33,28 @@ public class GlobalExceptionHandler{
       HttpStatus.UNPROCESSABLE_ENTITY.value(),
       "Erro de validação",
       erros
+    );
+  }
+
+  @ExceptionHandler(RegistroDuplicadoException.class)
+  @ResponseStatus(HttpStatus.CONFLICT)
+  public ErroResposta handleRegistroDuplicadoException(RegistroDuplicadoException e){
+    return ErroResposta.conflito(e.getMessage());
+  }
+
+  @ExceptionHandler(OperacaoNaoPermitidaException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ErroResposta handleOperacaoNaoPermitidaException(OperacaoNaoPermitidaException e){
+    return ErroResposta.respostaPadrao(e.getMessage());
+  }
+
+  @ExceptionHandler(RuntimeException.class)
+  @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+  public ErroResposta handleErrosNaoTratados(RuntimeException e){
+    return new ErroResposta(
+      HttpStatus.INTERNAL_SERVER_ERROR.value(), 
+      "Ocorreu um erro inesperado, entre em contato com a",
+      List.of()
     );
   }
 }
