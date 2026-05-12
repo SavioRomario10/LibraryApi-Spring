@@ -10,6 +10,7 @@ import io.github.SavioRomario10.LibraryApi.model.Livro;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,12 +18,12 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
 import io.github.SavioRomario10.LibraryApi.model.enums.GeneroLivro;
 
-
 /**
  * @see LivroRepositoryTest
  */
+
 @Repository
-public interface LivroRepository extends JpaRepository<Livro, UUID> {
+public interface LivroRepository extends JpaRepository<Livro, UUID>, JpaSpecificationExecutor<Livro>{
 
   //Query Method
   List<Livro> findByAutor(Autor autor);
