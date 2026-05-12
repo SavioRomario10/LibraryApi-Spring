@@ -3,6 +3,7 @@ package io.github.SavioRomario10.LibraryApi.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
 
 import io.github.SavioRomario10.LibraryApi.controller.mappers.LivroMapper;
 import io.github.SavioRomario10.LibraryApi.services.LivroService;
@@ -67,20 +70,47 @@ public class LivroController implements GenericController{
   }
 
   @GetMapping
-  public ResponseEntity<List<ResultadoPesquisaLivroDTO>> pesquisa(
+  public ResponseEntity<Page<ResultadoPesquisaLivroDTO>> pesquisa(
     @RequestParam(value = "isbn", required = false) String isbn,
     @RequestParam(value = "titulo", required = false) String titulo,
     @RequestParam(value = "genero", required = false) GeneroLivro genero,
     @RequestParam(value = "nome-autor", required = false) String nomeAutor,
-    @RequestParam(value = "ano-publicacao", required = false) Integer anoPublicacao
+    @RequestParam(value = "ano-publicacao", required = false) Integer anoPublicacao,
+    @RequestParam(value = "pagina", defaultValue = "0") 
+    Integer pagina,
+    @RequestParam(value = "tamanho-pagina", defaultValue = "10")
+    Integer tamanhoPagina
   ){
 
-    var resultado = service.pesquisa(isbn, titulo, nomeAutor, genero, anoPublicacao);
+    Page<Livro> paginaResultado = service.pesquisa(isbn, titulo, nomeAutor, genero, anoPublicacao, pagina, tamanhoPagina);
 
-    var list = resultado
-      .stream().map(mapper::toDTO)
-      .collect(Collectors.toList());
+    Page<ResultadoPesquisaLivroDTO> resultado = paginaResultado.map(mapper::toDTO);
 
-    return ResponseEntity.ok(list);
+    return ResponseEntity.ok(resultado);
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<Object> atualizar(
+    @PathVariable("id") String id, 
+    @RequestBody @Valid CadastroLivroDTO dto){
+    
+    return service.obterPorId(UUID.fromString(id))
+      .map(livro -> {
+       Livro entidade = mapper.toEntity(dto);
+
+       livro.setDataPublicacao(entidade.getDataPublicacao());
+       livro.setGenero(entidade.getGenero());
+       livro.setIsbn(entidade.getIsbn());
+       livro.setPreco(entidade.getPreco());
+       livro.setTitulo(entidade.getTitulo());
+       livro.setAutor(entidade.getAutor());
+
+       service.atualizar(livro);
+
+       return ResponseEntity.noContent().build();
+
+      }).orElseGet(
+        () -> ResponseEntity.notFound().build()
+      );
   }
 }

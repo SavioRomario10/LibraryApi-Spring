@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import io.github.SavioRomario10.LibraryApi.controller.dto.ErroCampo;
 import io.github.SavioRomario10.LibraryApi.controller.dto.ErroResposta;
-import io.github.SavioRomario10.LibraryApi.exception.RegistroDuplicadoException;
-import io.github.SavioRomario10.LibraryApi.exception.OperacaoNaoPermitidaException;;
+import io.github.SavioRomario10.LibraryApi.exceptions.CampoInvalidoException;
+import io.github.SavioRomario10.LibraryApi.exceptions.OperacaoNaoPermitidaException;
+import io.github.SavioRomario10.LibraryApi.exceptions.RegistroDuplicadoException;;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler{
@@ -46,6 +47,16 @@ public class GlobalExceptionHandler{
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ErroResposta handleOperacaoNaoPermitidaException(OperacaoNaoPermitidaException e){
     return ErroResposta.respostaPadrao(e.getMessage());
+  }
+
+  @ExceptionHandler(CampoInvalidoException.class)
+  @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+  public ErroResposta handleCampoInvalidoException(CampoInvalidoException e){
+    return new ErroResposta(
+      HttpStatus.UNPROCESSABLE_ENTITY.value(),
+      "Erro de validação",
+      List.of(new ErroCampo(e.getCampo(), e.getMessage()))
+    );
   }
 
   @ExceptionHandler(RuntimeException.class)

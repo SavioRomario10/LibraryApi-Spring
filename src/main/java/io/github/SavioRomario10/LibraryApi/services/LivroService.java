@@ -8,9 +8,14 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import io.github.SavioRomario10.LibraryApi.repository.LivroRepository;
+import io.github.SavioRomario10.LibraryApi.validator.LivroValidator;
 
 import static io.github.SavioRomario10.LibraryApi.repository.specs.LivroSpecs.*;
 
@@ -19,8 +24,10 @@ import static io.github.SavioRomario10.LibraryApi.repository.specs.LivroSpecs.*;
 public class LivroService {
 
   private final LivroRepository repository;
+  private final LivroValidator validator;
 
   public Livro salvar(Livro livro) {
+    validator.validarLivro(livro);
     return repository.save(livro);
   }
 
@@ -32,8 +39,8 @@ public class LivroService {
     repository.delete(livro);
   }
 
-  public List<Livro> pesquisa(
-    String isbn, String titulo, String nomeAutor, GeneroLivro genero, Integer anoPublicacao) {
+  public Page<Livro> pesquisa(
+    String isbn, String titulo, String nomeAutor, GeneroLivro genero, Integer anoPublicacao, Integer pagina, Integer tamanhoPagina) {
 
     Specification<Livro> specs = Specification.where((root, query, cb) -> cb.conjunction());
 
@@ -43,6 +50,16 @@ public class LivroService {
     if(anoPublicacao != null)specs = specs.and(anoPublicacaoEqual(anoPublicacao));
     if(nomeAutor != null)specs = specs.and(autorLike(nomeAutor));
 
-    return repository.findAll(specs);
+    Pageable paginacao = PageRequest.of(pagina, tamanhoPagina);
+    
+    return repository.findAll(specs, paginacao);
+  }
+
+  public void atualizar(Livro livro){
+    if(livro.getId() != null)
+      throw new IllegalArgumentException("O id do autor precisa ser informado!");
+    
+    validator.validarLivro(livro);
+    repository.save(livro);
   }
 }

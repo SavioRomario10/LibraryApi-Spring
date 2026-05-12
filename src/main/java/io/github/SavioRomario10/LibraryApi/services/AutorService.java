@@ -13,7 +13,7 @@ import io.github.SavioRomario10.LibraryApi.repository.AutorRepository;
 import io.github.SavioRomario10.LibraryApi.repository.LivroRepository;
 import io.github.SavioRomario10.LibraryApi.validator.AutorValidador;
 import lombok.RequiredArgsConstructor;
-import io.github.SavioRomario10.LibraryApi.exception.OperacaoNaoPermitidaException;
+import io.github.SavioRomario10.LibraryApi.exceptions.OperacaoNaoPermitidaException;
 import io.github.SavioRomario10.LibraryApi.model.Autor;
 
 @Service

@@ -123,8 +123,8 @@ public class LivroRepositoryTest {
 
   @Test
   public void buscarPorIsbnTest(){
-    List<Livro> livros = repository.findByIsbn("1465871234");
-    livros.forEach(System.out::println);
+    Optional<Livro> livro = repository.findByIsbn("1465871234");
+    livro.ifPresent(System.out::println); 
   }
 
   @Test

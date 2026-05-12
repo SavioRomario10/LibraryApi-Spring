@@ -2,6 +2,7 @@ package io.github.SavioRomario10.LibraryApi.repository;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.Optional;
 import java.math.BigDecimal;
 
 import io.github.SavioRomario10.LibraryApi.model.Autor;
@@ -28,7 +29,7 @@ public interface LivroRepository extends JpaRepository<Livro, UUID>, JpaSpecific
   //Query Method
   List<Livro> findByAutor(Autor autor);
   List<Livro> findByTitulo(String titulo);
-  List<Livro> findByIsbn(String isbn);
+  Optional<Livro> findByIsbn(String isbn);
   List<Livro> findByTituloAndPreco(String titulo, BigDecimal preco);
   List<Livro> findByTituloOrIsbnOrderByTitulo(String titulo, String isbn);
   List<Livro> findByDataPublicacaoBetween(LocalDate inicio, LocalDate fim);
