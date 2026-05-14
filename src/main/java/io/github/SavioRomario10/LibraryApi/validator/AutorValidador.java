@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import io.github.SavioRomario10.LibraryApi.repository.AutorRepository;
 import lombok.RequiredArgsConstructor;
-import io.github.SavioRomario10.LibraryApi.exception.RegistroDuplicadoException;
+import io.github.SavioRomario10.LibraryApi.exceptions.RegistroDuplicadoException;
 import io.github.SavioRomario10.LibraryApi.model.Autor;
 
 import org.springframework.stereotype.Component;

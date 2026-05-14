@@ -1,4 +1,4 @@
-package io.github.SavioRomario10.LibraryApi.exception;
+package io.github.SavioRomario10.LibraryApi.exceptions;
 
 public class RegistroDuplicadoException extends RuntimeException{
 
