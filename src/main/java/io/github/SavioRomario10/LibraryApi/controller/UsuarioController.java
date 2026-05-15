@@ -1,6 +1,7 @@
 package io.github.SavioRomario10.LibraryApi.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ public class UsuarioController {
   private final UsuarioMapper mapper;
 
   @PostMapping
+  @PreAuthorize("hasRole('ADMIN')")
   @ResponseStatus(HttpStatus.CREATED)
   public void salvar(@RequestBody UsuarioDTO dto){
     var usuario = mapper.toEntity(dto);
