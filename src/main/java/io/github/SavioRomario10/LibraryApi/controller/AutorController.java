@@ -2,7 +2,10 @@ package io.github.SavioRomario10.LibraryApi.controller;
 
 import io.github.SavioRomario10.LibraryApi.controller.dto.AutorDTO;
 import io.github.SavioRomario10.LibraryApi.model.Autor;
+import io.github.SavioRomario10.LibraryApi.model.Usuario;
+import io.github.SavioRomario10.LibraryApi.security.SecurityService;
 import io.github.SavioRomario10.LibraryApi.services.AutorService;
+import io.github.SavioRomario10.LibraryApi.services.UsuarioService;
 import jakarta.validation.Valid;
 import io.github.SavioRomario10.LibraryApi.controller.mappers.AutorMapper;
 
@@ -16,21 +19,22 @@ import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/autores")
+@RequiredArgsConstructor
 public class AutorController implements GenericController{
 
   private final AutorService service;
   private final AutorMapper mapper;
 
-  @PostMapping
+  @PostMapping()
   @PreAuthorize("hasRole('GERENTE')")
-  public ResponseEntity<Void> salvar(
-    @RequestBody @Valid AutorDTO dto){
-
+  public ResponseEntity<Void> salvar(@RequestBody @Valid AutorDTO dto){
+    
     Autor autor = mapper.toEntity(dto);
     service.salvar(autor);
     

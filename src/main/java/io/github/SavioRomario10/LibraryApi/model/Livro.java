@@ -61,8 +61,9 @@ public class Livro {
   @Column(name = "data_atualizacao")
   private LocalDateTime dataAtualizacao;
 
-  @Column(name = "id_usuario")
-  private UUID idUsuario;
+  @ManyToOne
+  @JoinColumn(name = "id_usuario")
+  private Usuario usuario;
 
   public Livro() {}
   public Livro(UUID id, String isbn, String titulo, GeneroLivro genero, LocalDate dataPublicacao, BigDecimal preco,
@@ -118,6 +119,25 @@ public class Livro {
   public void setPreco(BigDecimal preco) {
     this.preco = preco;
   }
+  public LocalDateTime getDataCadastro() {
+    return dataCadastro;
+  }
+  public void setDataCadastro(LocalDateTime dataCadastro) {
+    this.dataCadastro = dataCadastro;
+  }
+  public LocalDateTime getDataAtualizacao() {
+    return dataAtualizacao;
+  }
+  public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
+    this.dataAtualizacao = dataAtualizacao;
+  }
+  public Usuario getUsuario() {
+    return usuario;
+  }
+  public void setUsuario(Usuario usuario) {
+    this.usuario = usuario;
+  }
+  
   @Override
   public int hashCode() {
     final int prime = 31;

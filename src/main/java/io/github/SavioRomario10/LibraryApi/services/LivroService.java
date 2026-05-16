@@ -1,6 +1,7 @@
 package io.github.SavioRomario10.LibraryApi.services;
 
 import io.github.SavioRomario10.LibraryApi.model.Livro;
+import io.github.SavioRomario10.LibraryApi.model.Usuario;
 import io.github.SavioRomario10.LibraryApi.model.enums.GeneroLivro;
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import io.github.SavioRomario10.LibraryApi.repository.LivroRepository;
+import io.github.SavioRomario10.LibraryApi.security.SecurityService;
 import io.github.SavioRomario10.LibraryApi.validator.LivroValidator;
 
 import static io.github.SavioRomario10.LibraryApi.repository.specs.LivroSpecs.*;
@@ -24,9 +26,14 @@ public class LivroService {
 
   private final LivroRepository repository;
   private final LivroValidator validator;
+  private final SecurityService service;
 
   public Livro salvar(Livro livro) {
     validator.validarLivro(livro);
+    
+    Usuario usuario = service.obterUsuarioLogado();
+    livro.setUsuario(usuario);
+
     return repository.save(livro);
   }
 

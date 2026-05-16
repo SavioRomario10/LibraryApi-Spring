@@ -11,21 +11,28 @@ import org.springframework.stereotype.Service;
 
 import io.github.SavioRomario10.LibraryApi.repository.AutorRepository;
 import io.github.SavioRomario10.LibraryApi.repository.LivroRepository;
+import io.github.SavioRomario10.LibraryApi.security.SecurityService;
 import io.github.SavioRomario10.LibraryApi.validator.AutorValidador;
 import lombok.RequiredArgsConstructor;
 import io.github.SavioRomario10.LibraryApi.exceptions.OperacaoNaoPermitidaException;
 import io.github.SavioRomario10.LibraryApi.model.Autor;
+import io.github.SavioRomario10.LibraryApi.model.Usuario;
 
 @Service
 @RequiredArgsConstructor
 public class AutorService {
 
-  private final AutorRepository repository;
   private final AutorValidador validador;
+  private final AutorRepository repository;
   private final LivroRepository livroRepository;
+  private final SecurityService securityService;
 
   public Autor salvar(Autor autor) {
     validador.validar(autor);
+    
+    Usuario usuario = securityService.obterUsuarioLogado();
+    autor.setUsuario(usuario);
+    
     return repository.save(autor);
   }
 

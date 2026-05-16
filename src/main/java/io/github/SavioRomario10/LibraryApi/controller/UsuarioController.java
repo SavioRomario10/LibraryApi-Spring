@@ -22,7 +22,6 @@ public class UsuarioController {
   private final UsuarioMapper mapper;
 
   @PostMapping
-  @PreAuthorize("hasRole('ADMIN')")
   @ResponseStatus(HttpStatus.CREATED)
   public void salvar(@RequestBody UsuarioDTO dto){
     var usuario = mapper.toEntity(dto);

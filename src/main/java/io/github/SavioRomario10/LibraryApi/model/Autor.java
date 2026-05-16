@@ -12,16 +12,23 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 import jakarta.persistence.Column;
 
+import org.hibernate.annotations.ManyToAny;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name="autor")
+@Table(name="autor", schema = "public")
+@Getter
+@Setter
 @EntityListeners(AuditingEntityListener.class)
 public class Autor {
 
@@ -50,8 +57,9 @@ public class Autor {
   @Column(name = "data_atualizacao")
   private LocalDateTime dataAtualizacao;
 
-  @Column(name = "id_usuario")
-  private UUID idUsuario;
+  @ManyToOne
+  @JoinColumn(name = "id_usuario")
+  private Usuario usuario;
 
   public Autor() {}
   public Autor(UUID id, String nome, LocalDate dataNascimento, String nacionalidade) {
@@ -104,12 +112,12 @@ public class Autor {
   public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
     this.dataAtualizacao = dataAtualizacao;
   }
-  public UUID getIdUsuario() {
-    return idUsuario;
+    public Usuario getUsuario() {
+    return usuario;
   }
-  public void setIdUsuario(UUID idUsuario) {
-    this.idUsuario = idUsuario;
-  }
+  public void setUsuario(Usuario usuario) {
+    this.usuario = usuario;
+  } 
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -137,5 +145,5 @@ public class Autor {
   public String toString() {
     return "Autor [id=" + id + ", nome=" + nome + ", dataNascimento=" + dataNascimento + ", nacionalidade="
         + nacionalidade + "]";
-  } 
+  }
 }
