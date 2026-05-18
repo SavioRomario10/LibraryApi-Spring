@@ -1,7 +1,7 @@
 package io.github.SavioRomario10.LibraryApi.services;
 
-import io.github.SavioRomario10.LibraryApi.model.Livro;
 import io.github.SavioRomario10.LibraryApi.model.Usuario;
+import io.github.SavioRomario10.LibraryApi.model.Livro;
 import io.github.SavioRomario10.LibraryApi.model.enums.GeneroLivro;
 import lombok.RequiredArgsConstructor;
 

@@ -32,7 +32,7 @@ public class AutorService {
     
     Usuario usuario = securityService.obterUsuarioLogado();
     autor.setUsuario(usuario);
-    
+
     return repository.save(autor);
   }
 
