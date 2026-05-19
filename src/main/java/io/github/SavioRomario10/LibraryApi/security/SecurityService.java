@@ -5,7 +5,6 @@ import io.github.SavioRomario10.LibraryApi.services.UsuarioService;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -20,11 +19,10 @@ public class SecurityService {
     
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+    if(authentication instanceof CustomAuthentication customAuthentication){
+      return customAuthentication.getUsuario();
+    }
 
-    String login =  userDetails.getUsername();
-
-    return usuarioService.obterPorLogin(login);
+    return null;
   }
-
 }
