@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.github.SavioRomario10.LibraryApi.controller.dto.UsuarioDTO;
 import io.github.SavioRomario10.LibraryApi.controller.mappers.UsuarioMapper;
 import io.github.SavioRomario10.LibraryApi.services.UsuarioService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -23,7 +24,7 @@ public class UsuarioController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public void salvar(@RequestBody UsuarioDTO dto){
+  public void salvar(@RequestBody @Valid UsuarioDTO dto){
     var usuario = mapper.toEntity(dto);
     service.salvar(usuario);
   }  

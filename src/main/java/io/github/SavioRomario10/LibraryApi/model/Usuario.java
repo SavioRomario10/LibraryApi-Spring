@@ -27,6 +27,9 @@ public class Usuario {
   @Column
   private String senha;
 
+  @Column
+  private String email;
+
   @Type(ListArrayType.class)
   @Column(name="roles", columnDefinition = "varchar[]")
   private List<String> roles;
@@ -55,4 +58,10 @@ public class Usuario {
   public void setRoles(List<String> roles) {
     this.roles = roles;
   }  
+  public String getEmail() {
+    return email;
+  }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 }
