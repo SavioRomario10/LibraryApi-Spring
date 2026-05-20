@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import io.github.SavioRomario10.LibraryApi.security.CustomUserDetailsService;
+import io.github.SavioRomario10.LibraryApi.security.LoginSocialSuccessHandler;
 import io.github.SavioRomario10.LibraryApi.services.UsuarioService;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,13 +25,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SecurityConfiguration {
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain securityFilterChain(HttpSecurity http, LoginSocialSuccessHandler socialSuccessHandler) throws Exception {
     return http
         .csrf(AbstractHttpConfigurer::disable)
         .httpBasic(Customizer.withDefaults())
-//        .formLogin(configurer -> 
-//           configurer.loginPage("/login"))
-        .formLogin(Customizer.withDefaults())
+        .formLogin(configurer -> 
+           configurer.loginPage("/login"))
         .authorizeHttpRequests(authorize -> {
             authorize.requestMatchers("/login/**").permitAll();
             authorize.requestMatchers(HttpMethod.POST, "/usuarios/**").permitAll();
@@ -38,7 +38,11 @@ public class SecurityConfiguration {
             authorize.anyRequest().authenticated();
           }
         )
-        .oauth2Login(Customizer.withDefaults())
+        .oauth2Login(oauth2 ->{
+          oauth2
+            .loginPage("/login")
+            .successHandler(socialSuccessHandler);
+        })
         .build();
   } 
 
