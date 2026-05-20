@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import io.github.SavioRomario10.LibraryApi.repository.LivroRepository;
 import io.github.SavioRomario10.LibraryApi.security.SecurityService;
@@ -37,11 +38,11 @@ public class LivroService {
     return repository.save(livro);
   }
 
-  public Optional<Livro> obterPorId(UUID id) {
+  public Optional<Livro> obterPorId(@NonNull UUID id) {
     return repository.findById(id);
   }
 
-  public void deletar(Livro livro) {
+  public void deletar(@NonNull Livro livro) {
     repository.delete(livro);
   }
 
@@ -61,9 +62,9 @@ public class LivroService {
     return repository.findAll(specs, paginacao);
   }
 
-  public void atualizar(Livro livro){
-    if(livro.getId() != null)
-      throw new IllegalArgumentException("O id do autor precisa ser informado!");
+  public void atualizar(@NonNull Livro livro){
+    if(livro.getId() == null)
+      throw new IllegalArgumentException("O id do livro precisa ser informado!");
     
     validator.validarLivro(livro);
     repository.save(livro);

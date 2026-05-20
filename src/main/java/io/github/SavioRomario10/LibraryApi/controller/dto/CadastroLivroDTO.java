@@ -23,7 +23,7 @@ public record CadastroLivroDTO(
   LocalDate dataPublicacao,
   GeneroLivro genero,
   BigDecimal preco,
-  @NotNull(message = "Autor é obrigatório")
+  @NotNull(message = "Autor é obrigatório")
   UUID idAutor
 ) {
 

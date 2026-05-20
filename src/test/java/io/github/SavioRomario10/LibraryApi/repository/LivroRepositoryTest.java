@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 import java.util.Optional;
 import java.util.List;
+import java.util.Objects;
 
 import io.github.SavioRomario10.LibraryApi.model.enums.GeneroLivro;
 import io.github.SavioRomario10.LibraryApi.model.Autor;
@@ -34,7 +35,11 @@ public class LivroRepositoryTest {
     livro.setDataPublicacao(LocalDate.of(2015, 5, 5));
     livro.setPreco(BigDecimal.valueOf(150));
 
-    Autor autor = autorRepository.findById(UUID.fromString("d2f4ce19-6607-44ef-ba96-6705e0424b63")).orElse(null);
+    Autor autor = autorRepository.findById(
+        Objects.requireNonNull(
+            UUID.fromString(
+              "670e952f-7e3b-4165-b874-17416229e26f")
+            )).orElse(null);
 
     livro.setAutor(autor);
 
@@ -65,7 +70,8 @@ public class LivroRepositoryTest {
 
   @Test
   public void atualizarTest(){
-    var id = UUID.fromString("59c69b00-0f34-4ef1-a6c1-94c1ee5ab2f6");
+    var id =  Objects.requireNonNull(
+      UUID.fromString("59c69b00-0f34-4ef1-a6c1-94c1ee5ab2f6"));
 
     Optional<Livro> possivelLivro = repository.findById(id);
 
@@ -92,23 +98,30 @@ public class LivroRepositoryTest {
 
   @Test
   public void deletePorIdTest(){
-    var id = UUID.fromString("670e952f-7e3b-4165-b874-17416229e26f");
+    var id =  Objects.requireNonNull(
+      UUID.fromString("670e952f-7e3b-4165-b874-17416229e26f"));
 
     repository.deleteById(id);
   }
 
   @Test
   public void deletarTest(){
-    var id = UUID.fromString("670e952f-7e3b-4165-b874-17416229e26f");
+    var id =  Objects.requireNonNull(
+      UUID.fromString("670e952f-7e3b-4165-b874-17416229e26f"));
+
     var livro = repository.findById(id).get();
 
-    repository.delete(livro);
+    if(livro != null){
+      repository.delete(livro);
+    }
   }
 
   @Test
   @Transactional
   public void buscarLivroTest(){
-    UUID id = UUID.fromString("670e952f-7e3b-4165-b874-17416229e26f");
+    UUID id = Objects.requireNonNull(
+      UUID.fromString("670e952f-7e3b-4165-b874-17416229e26f"));
+
     Livro livro = repository.findById(id).orElse(null);
 
     System.out.println("livro:"+livro.getTitulo());

@@ -2,10 +2,7 @@ package io.github.SavioRomario10.LibraryApi.controller;
 
 import io.github.SavioRomario10.LibraryApi.controller.dto.AutorDTO;
 import io.github.SavioRomario10.LibraryApi.model.Autor;
-import io.github.SavioRomario10.LibraryApi.model.Usuario;
-import io.github.SavioRomario10.LibraryApi.security.SecurityService;
 import io.github.SavioRomario10.LibraryApi.services.AutorService;
-import io.github.SavioRomario10.LibraryApi.services.UsuarioService;
 import jakarta.validation.Valid;
 import io.github.SavioRomario10.LibraryApi.controller.mappers.AutorMapper;
 
@@ -16,11 +13,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.Optional;
+import java.util.Objects;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -39,6 +35,10 @@ public class AutorController implements GenericController{
     service.salvar(autor);
     
     URI location = gerarHeaderLocation(autor.getId());
+
+    if(location == null){
+      return ResponseEntity.badRequest().build();
+    }
     
     return ResponseEntity.created(location).build();
   }
@@ -47,7 +47,7 @@ public class AutorController implements GenericController{
   @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
   public ResponseEntity<AutorDTO> obterDetalhes(@PathVariable("id") String id){
 
-    var idAutor = UUID.fromString(id);
+    var idAutor = Objects.requireNonNull(UUID.fromString(id));
 
     return service
       .obterPorId(idAutor)
@@ -60,15 +60,17 @@ public class AutorController implements GenericController{
 
   @DeleteMapping("/{id}")
   @PreAuthorize("hasRole('GERENTE')")
-  public ResponseEntity<Void> deletar(@PathVariable("id") String id){
+  public ResponseEntity<Object> deletar(@PathVariable("id") String id){
 
-    Optional<Autor> autorOptional = service.obterPorId(UUID.fromString(id));
+    Optional<Autor> autorOptional = service.obterPorId(Objects.requireNonNull(UUID.fromString(id)));
     
-    if(autorOptional.isPresent()){
-      service.deletar(autorOptional.get());
-      return ResponseEntity.noContent().build();
-    }
-    return ResponseEntity.notFound().build();
+    
+    return autorOptional.map(autor -> {
+        service.deletar(autor);
+        return ResponseEntity.noContent().build();
+        }).orElseGet(() ->
+          ResponseEntity.notFound().build()
+        );
   }
 
   @GetMapping

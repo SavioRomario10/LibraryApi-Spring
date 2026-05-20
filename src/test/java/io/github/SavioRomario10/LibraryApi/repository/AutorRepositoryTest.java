@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,8 @@ public class AutorRepositoryTest {
 
   @Test
   public void atualizarTest(){
-    var id = UUID.fromString("d2f4ce19-6607-44ef-ba96-6705e0424b63");
+    var id =  Objects.requireNonNull(
+      UUID.fromString("d2f4ce19-6607-44ef-ba96-6705e0424b63"));
 
     Optional<Autor> possivelAutor = repository.findById(id);
 
@@ -66,17 +68,23 @@ public class AutorRepositoryTest {
 
   @Test
   public void deletePorIdTest(){
-    var id = UUID.fromString("d2f4ce19-6607-44ef-ba96-6705e0424b63");
+    var id =  Objects.requireNonNull(
+      UUID.fromString("d2f4ce19-6607-44ef-ba96-6705e0424b63"));
 
     repository.deleteById(id);
   }
 
   @Test
   public void deletarTest(){
-    var id = UUID.fromString("145f5905-4234-4cc5-a30e-949a1e7ae22b");
-    var autor = repository.findById(id).get();
+    var id =  Objects.requireNonNull(
+      UUID.fromString("145f5905-4234-4cc5-a30e-949a1e7ae22b"));
+    
+    var autor = repository.findById(id)
+    .orElseThrow(() -> new RuntimeException("Autor não encontrado"));
 
-    repository.delete(autor);
+    if(autor != null){
+      repository.delete(autor);
+    }
   }
 
   @Test
@@ -101,12 +109,14 @@ public class AutorRepositoryTest {
     autor.getLivros().add(livro);
 
     repository.save(autor);
-    livroRepository.saveAll(autor.getLivros());
+
+    livroRepository.saveAll(Objects.requireNonNull(autor.getLivros()));
   }
 
-  @Test
+@Test
   public void mostrarLivrosAutor(){
-    var id = UUID.fromString("48fe489c-1dcc-4d54-888f-7eacd9a4d207");
+    var id =  Objects.requireNonNull(
+      UUID.fromString("48fe489c-1dcc-4d54-888f-7eacd9a4d207"));
     var autor = repository.findById(id).get();
 
     List<Livro> livros = livroRepository.findByAutor(autor);

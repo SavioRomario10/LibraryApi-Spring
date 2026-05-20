@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.List;
+import java.util.Collections;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.FetchType;
@@ -20,7 +21,6 @@ import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.Column;
 
-import org.hibernate.annotations.ManyToAny;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -93,8 +93,8 @@ public class Autor {
   public void setNacionalidade(String nacionalidade) {
     this.nacionalidade = nacionalidade;
   }  
-    public List<Livro> getLivros() {
-    return livros;
+  public List<Livro> getLivros() {
+    return livros != null ? livros : Collections.emptyList();
   }
   public void setLivros(List<Livro> livros) {
     this.livros = livros;

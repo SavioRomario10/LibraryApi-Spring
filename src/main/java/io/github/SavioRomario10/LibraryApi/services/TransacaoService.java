@@ -3,6 +3,7 @@ package io.github.SavioRomario10.LibraryApi.services;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,12 @@ public class TransacaoService {
 
   @Transactional
   public void atualizacaoSemAtualizar(){
-    var livro = livroRepository.findById(UUID.fromString("670e952f-7e3b-4165-b874-17416229e26f")).orElse(null);
+
+    UUID id = Objects.requireNonNull(
+      UUID.fromString("670e952f-7e3b-4165-b874-17416229e26f"));
+
+    var livro = livroRepository.findById(id)
+      .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
 
     livro.setPreco(BigDecimal.valueOf(1000));
   }

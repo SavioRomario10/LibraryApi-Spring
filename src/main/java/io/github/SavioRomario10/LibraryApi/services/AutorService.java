@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.lang.NonNull;
+
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
@@ -44,11 +46,11 @@ public class AutorService {
     repository.save(autor);
   }
 
-  public Optional<Autor> obterPorId(UUID id){
+  public Optional<Autor> obterPorId(@NonNull UUID id){
     return repository.findById(id);
   }
 
-  public void deletar(Autor autor){
+  public void deletar(@NonNull Autor autor){
     if(possuiLivro(autor)){
       throw new OperacaoNaoPermitidaException("Não é permitido excluir, este Autor possui livros cadastrados!");
     }

@@ -4,6 +4,8 @@ import javax.sql.DataSource;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +21,7 @@ public class DatabaseConfiguration {
   @Value("${spring.datasource.password}")
   String password;
   @Value("${spring.datasource.driver-class-name}")
-  String driver;
+  Optional<String> driver;
 
   @Bean
   public DataSource dataSource(){
@@ -28,7 +30,7 @@ public class DatabaseConfiguration {
     ds.setUrl(url);
     ds.setUsername(username);
     ds.setPassword(password);
-    ds.setDriverClassName(driver);
+    driver.ifPresent(ds::setDriverClassName);
 
     return ds;
   }
@@ -41,7 +43,7 @@ public class DatabaseConfiguration {
     config.setJdbcUrl(url);
     config.setUsername(username);
     config.setPassword(password);
-    config.setDriverClassName(driver);
+    driver.ifPresent(config::setDriverClassName);
 
     config.setMaximumPoolSize(10);
     config.setMinimumIdle(1);

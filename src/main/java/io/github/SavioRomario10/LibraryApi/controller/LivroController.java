@@ -15,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import lombok.RequiredArgsConstructor;
 import jakarta.validation.Valid;
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 
@@ -45,6 +43,10 @@ public class LivroController implements GenericController{
       service.salvar(livro);
       URI location = gerarHeaderLocation(livro.getId());
       
+      if(location == null){
+        return ResponseEntity.badRequest().build();
+      }
+
       return ResponseEntity.created(location).build();
   }
 
