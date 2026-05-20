@@ -10,8 +10,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import io.github.SavioRomario10.LibraryApi.model.Usuario;
 import io.github.SavioRomario10.LibraryApi.services.UsuarioService;
 import jakarta.servlet.ServletException;

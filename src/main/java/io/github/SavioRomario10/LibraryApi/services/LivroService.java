@@ -49,7 +49,7 @@ public class LivroService {
   public Page<Livro> pesquisa(
     String isbn, String titulo, String nomeAutor, GeneroLivro genero, Integer anoPublicacao, Integer pagina, Integer tamanhoPagina) {
 
-    Specification<Livro> specs = Specification.where((root, query, cb) -> cb.conjunction());
+    Specification<Livro> specs = (root, query, cb) -> cb.conjunction();
 
     if(isbn != null)specs = specs.and(isbnEqual(isbn));
     if(titulo != null)specs = specs.and(tituloLike(titulo));

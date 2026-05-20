@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public record UsuarioDTO(
+  String id,
   @NotBlank(message = "campo login é obrigatório")
   String login, 
   @NotBlank(message = "campo senha é obrigatório")

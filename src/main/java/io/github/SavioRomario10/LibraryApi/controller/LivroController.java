@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.UUID;
+import java.util.Objects;
 
 import org.springframework.data.domain.Page;
 
@@ -53,7 +54,7 @@ public class LivroController implements GenericController{
   @GetMapping("/{id}")
   @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
   public ResponseEntity<ResultadoPesquisaLivroDTO> obterDetalhes( @PathVariable("id") String id){
-    return service.obterPorId(UUID.fromString(id))
+    return service.obterPorId(Objects.requireNonNull(UUID.fromString(id)))
       .map(livro -> {
         var dto = mapper.toDTO(livro);
         return ResponseEntity.ok(dto);
@@ -66,9 +67,9 @@ public class LivroController implements GenericController{
   @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
   public ResponseEntity<Object> deletar(
     @PathVariable("id") String id){
-      return service.obterPorId(UUID.fromString(id))
+      return service.obterPorId(Objects.requireNonNull(UUID.fromString(id)))
           .map(livro -> {
-            service.deletar(livro);
+            service.deletar(Objects.requireNonNull(livro));
             return ResponseEntity.noContent().build();
           }).orElseGet(
             () -> ResponseEntity.notFound().build()
@@ -102,7 +103,7 @@ public class LivroController implements GenericController{
     @PathVariable("id") String id, 
     @RequestBody @Valid CadastroLivroDTO dto){
     
-    return service.obterPorId(UUID.fromString(id))
+    return service.obterPorId(Objects.requireNonNull(UUID.fromString(id)))
       .map(livro -> {
        Livro entidade = mapper.toEntity(dto);
 

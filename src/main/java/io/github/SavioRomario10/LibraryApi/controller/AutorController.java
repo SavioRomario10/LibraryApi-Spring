@@ -66,7 +66,7 @@ public class AutorController implements GenericController{
     
     
     return autorOptional.map(autor -> {
-        service.deletar(autor);
+        service.deletar(Objects.requireNonNull(autor));
         return ResponseEntity.noContent().build();
         }).orElseGet(() ->
           ResponseEntity.notFound().build()
@@ -94,7 +94,7 @@ public class AutorController implements GenericController{
     @PathVariable("id") String id,
     @RequestBody @Valid AutorDTO autorDTO){
 
-      Optional<Autor> autorOptional = service.obterPorId(UUID.fromString(id));
+      Optional<Autor> autorOptional = service.obterPorId(Objects.requireNonNull(UUID.fromString(id)));
       
       if(autorOptional.isEmpty()){
         return ResponseEntity.notFound().build();
