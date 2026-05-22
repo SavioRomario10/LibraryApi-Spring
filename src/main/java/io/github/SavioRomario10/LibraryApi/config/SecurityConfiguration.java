@@ -9,15 +9,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
-import io.github.SavioRomario10.LibraryApi.security.CustomUserDetailsService;
 import io.github.SavioRomario10.LibraryApi.security.LoginSocialSuccessHandler;
-import io.github.SavioRomario10.LibraryApi.services.UsuarioService;
-
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
 @Configuration
 @EnableWebSecurity
@@ -43,37 +38,25 @@ public class SecurityConfiguration {
             .loginPage("/login")
             .successHandler(socialSuccessHandler);
         })
+        .oauth2ResourceServer(
+          oauth2Rs -> oauth2Rs.jwt(Customizer.withDefaults()))
         .build();
   } 
-
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder(10);
-  }
-
-//  @Bean
-  public UserDetailsService userDetailsService(UsuarioService usuarioService) {
-    /**
-     * 
-    UserDetails user1 = User.builder()
-    .username("usuario")
-    .password(encoder.encode("123"))
-    .roles("USER")
-    .build();
-    
-    UserDetails user2 = User.builder()
-    .username("admin")
-    .password(encoder.encode("admin"))
-    .roles("ADMIN")
-    .build();
-    
-    return new InMemoryUserDetailsMenager(user1, user2)
-    */
-    return new CustomUserDetailsService(usuarioService);
-  }
 
   @Bean 
   public GrantedAuthorityDefaults grantedAuthorityDefaults() {
     return new GrantedAuthorityDefaults(""); 
+  }
+
+  @Bean
+  public JwtAuthenticationConverter jwtAuthenticationConverter() {
+
+    var authorityConverter = new JwtGrantedAuthoritiesConverter();
+    authorityConverter.setAuthorityPrefix("");
+
+    var converter = new JwtAuthenticationConverter();
+    converter.setJwtGrantedAuthoritiesConverter(authorityConverter);
+
+    return converter;
   }
 }
