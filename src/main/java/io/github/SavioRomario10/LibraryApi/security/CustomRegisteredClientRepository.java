@@ -1,4 +1,4 @@
-package io.github.SavioRomario10.LibraryApi.services;
+package io.github.SavioRomario10.LibraryApi.security;
 
 import org.springframework.lang.Nullable;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.server.authorization.settings.ClientS
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 import org.springframework.stereotype.Component;
 
+import io.github.SavioRomario10.LibraryApi.services.ClientService;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -38,6 +39,7 @@ public class CustomRegisteredClientRepository implements RegisteredClientReposit
         .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
         .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
         .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+        .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
         .tokenSettings(token)
         .clientSettings(settings) 
         .build();
