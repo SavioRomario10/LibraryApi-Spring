@@ -10,11 +10,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.github.SavioRomario10.LibraryApi.model.Client;
 import io.github.SavioRomario10.LibraryApi.services.ClientService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/clients")
 @RequiredArgsConstructor
+@Tag(name = "Clientes")
 public class ClientController {
 
   private final ClientService service;
@@ -22,6 +27,12 @@ public class ClientController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   @PreAuthorize("hasRole('GERENTE')")
+  @Operation(summary = "Salvar", description = "Salva um novo cliente no sistema.")
+  @ApiResponses({
+    @ApiResponse(responseCode = "201", description = "Cliente criado com sucesso."),
+    @ApiResponse(responseCode = "422", description = "Erro de validação."),
+    @ApiResponse(responseCode = "409", description = "Requisição inválida.")
+  })
   public void salvar(@RequestBody Client client){
     service.salvar(client);
   }

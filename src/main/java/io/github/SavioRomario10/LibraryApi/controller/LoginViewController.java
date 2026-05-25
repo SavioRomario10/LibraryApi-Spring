@@ -6,7 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @Controller
+@Tag(name = "Login", description = "Endpoints relacionados ao login e autorização")
 public class LoginViewController {
 
   @GetMapping("/login")
