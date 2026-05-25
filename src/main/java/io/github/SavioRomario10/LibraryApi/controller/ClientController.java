@@ -15,11 +15,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/clients")
 @RequiredArgsConstructor
 @Tag(name = "Clientes")
+@Slf4j
 public class ClientController {
 
   private final ClientService service;
@@ -34,6 +36,9 @@ public class ClientController {
     @ApiResponse(responseCode = "409", description = "Requisição inválida.")
   })
   public void salvar(@RequestBody Client client){
+
+    log.info("Cadastrando um novo cliente: {} e escope {}", client.getClientId(), client.getScope());
+
     service.salvar(client);
   }
 }
